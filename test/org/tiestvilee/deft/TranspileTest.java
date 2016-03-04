@@ -19,7 +19,9 @@ public class TranspileTest {
     public void converts_from_xslt_to_deft_and_back() throws Exception {
         String xsltViaDocument = serialise(documentFrom(testFile()));
 
-        String result = Transpile.transpileToXslt(Transpile.transpileToDeft(xsltViaDocument));
+        String deft = Transpile.transpileToDeft(xsltViaDocument);
+        System.out.println("deft = " + deft);
+        String result = Transpile.transpileToXslt(deft);
 
         Assert.assertEquals(stripWhitespaceFrom(xsltViaDocument), stripWhitespaceFrom(result));
         assertThat(stripWhitespaceFrom(xsltViaDocument), is(stripWhitespaceFrom(result)));
@@ -35,6 +37,12 @@ public class TranspileTest {
     public void deft_respects_text() throws Exception {
         assertThat(Transpile.transpileToDeft("<xslt:something>hello</xslt:something>"), is("[xslt:something 'hello']"));
         assertThat(Transpile.transpileToXslt("[xslt:something 'hello']"), is("<xslt:something>hello</xslt:something>"));
+    }
+
+    @Test
+    public void deft_understands_attributes() throws Exception {
+        assertThat(Transpile.transpileToDeft("<xslt:something attr='value'>hello</xslt:something>"), is("[xslt:something [@attr 'value'] 'hello']"));
+        assertThat(Transpile.transpileToXslt("[xslt:something [@attr 'value'] 'hello']"), is("<xslt:something attr='value'>hello</xslt:something>"));
     }
 
     private String stripWhitespaceFrom(String originalXslt) {

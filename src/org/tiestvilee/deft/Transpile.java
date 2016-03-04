@@ -1,7 +1,11 @@
 package org.tiestvilee.deft;
 
+import com.googlecode.totallylazy.Segment;
 import com.googlecode.totallylazy.parser.Parsers;
 import com.googlecode.totallylazy.parser.Result;
+import org.tiestvilee.deft.grammar.DeftGrammar;
+import org.tiestvilee.deft.grammar.Node;
+import org.tiestvilee.deft.grammar.Tag;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.Locator;
@@ -14,6 +18,7 @@ import java.io.IOException;
 
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static java.lang.String.format;
+import static org.tiestvilee.deft.DeftXsltSerialiser.deftToXslt;
 
 public class Transpile {
     public static String transpileToDeft(String xslt) throws Exception {
@@ -65,6 +70,12 @@ public class Transpile {
                 @Override
                 public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
                     result.append(format("[%s", qName));
+                    for (int i = 0; i < attributes.getLength(); i++) {
+                        String value = attributes.getValue(i);
+                        String attributesQName = attributes.getQName(i);
+
+                        result.append(" [@").append(attributesQName).append(" '").append(value).append("']");
+                    }
                 }
 
                 @Override
@@ -92,11 +103,17 @@ public class Transpile {
     }
 
     public static String transpileToXslt(String deft) {
-        Result<DeftGrammar.Tag> result = DeftGrammar.tag.parse(deft);
+        Result<Node> result = DeftGrammar.tag.parse(deft);
         if (result.failure()) {
-            throw new RuntimeException(result.message());
+            Segment<Character> remainder = result.remainder();
+            int charsLeft = 0;
+            while (!remainder.isEmpty()) {
+                remainder = remainder.tail();
+                charsLeft++;
+            }
+            throw new RuntimeException(result.message() + " at " + (deft.length() - charsLeft));
         }
-        return DeftGrammar.deftToXslt(result.option().get());
+        return deftToXslt(result.option().get());
     }
 
 }
