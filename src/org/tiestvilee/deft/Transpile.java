@@ -4,22 +4,16 @@ import com.googlecode.totallylazy.parser.Result;
 import com.sun.xml.internal.rngom.xml.sax.AbstractLexicalHandler;
 import org.tiestvilee.deft.grammar.DeftGrammar;
 import org.tiestvilee.deft.grammar.Node;
+import org.tiestvilee.deft.grammar.Tag;
 import org.xml.sax.Attributes;
-import org.xml.sax.InputSource;
-import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
-import org.xml.sax.ext.LexicalHandler;
 import org.xml.sax.helpers.DefaultHandler;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.util.ArrayDeque;
-import java.util.Deque;
 
 import static java.lang.String.format;
-import static org.tiestvilee.deft.DeftXsltSerialiser.deftToXslt;
 
 public class Transpile {
     public static String transpileToDeft(String xslt) throws Exception {
@@ -80,7 +74,7 @@ public class Transpile {
         if (result.failure()) {
             throw new RuntimeException(result.message());
         }
-        return deftToXslt(result.option().get());
+        return new DeftXsltSerialiser().visit((Tag) result.option().get());
     }
 
 }

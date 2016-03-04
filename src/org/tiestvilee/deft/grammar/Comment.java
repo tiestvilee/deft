@@ -6,4 +6,8 @@ public class Comment extends Node {
     public Comment(String string) {
         this.string = string;
     }
+
+    public <T> T visit(NodeVisitor<T> visitor) {
+        return visitor.visit(this);
+    }
 }

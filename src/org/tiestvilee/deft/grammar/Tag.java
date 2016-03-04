@@ -17,4 +17,8 @@ public class Tag extends Node {
         this.tagName = tagName;
         this.children = children;
     }
+
+    public <T> T visit(NodeVisitor<T> visitor) {
+        return visitor.visit(this);
+    }
 }

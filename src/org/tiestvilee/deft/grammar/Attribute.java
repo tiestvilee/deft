@@ -12,4 +12,8 @@ public class Attribute extends Node {
         this.tagName = tagName;
         this.value = value;
     }
+
+    public <T> T visit(NodeVisitor<T> visitor) {
+        return visitor.visit(this);
+    }
 }

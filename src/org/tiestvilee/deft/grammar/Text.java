@@ -6,4 +6,8 @@ public class Text extends Node {
     public Text(String string) {
         this.string = string;
     }
+
+    public <T> T visit(NodeVisitor<T> visitor) {
+        return visitor.visit(this);
+    }
 }
