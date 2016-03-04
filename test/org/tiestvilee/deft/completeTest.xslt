@@ -1,3 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xsl:stylesheet [
+        <!ENTITY nbsp "&#160;">
+        <!ENTITY copy "&#169;">
+        ]>
 <xsl:stylesheet version="2.0"
                 xmlns:meta="http://www.springer.com/app/meta"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -775,7 +780,7 @@
                 <xsl:otherwise> <!-- DisplayOrder='Eastern' -->
                     <xsl:apply-templates select="FamilyName"/>
                     <xsl:if test="$mainLanguage != 'Zh'">
-                        <xsl:text>&#160;</xsl:text> <!-- don't separate family and given name by space for names in Chinese -->
+                        <xsl:text>&nbsp;</xsl:text> <!-- don't separate family and given name by space for names in Chinese -->
                     </xsl:if>
                     <xsl:call-template name="RenderGivenNameAndParticle"/>
                 </xsl:otherwise>
@@ -819,7 +824,7 @@
                     <xsl:text>ContactOfAuthor</xsl:text>
                     <xsl:value-of select="$ContactID"/>
                 </xsl:attribute>
-                <div class="ContactIcon">&#160;</div>
+                <div class="ContactIcon">&nbsp;</div>
                 <div class="ContactAuthorLine">
                     <xsl:for-each select="../AuthorName | ../InstitutionalAuthorName">
                         <xsl:choose>
@@ -833,7 +838,7 @@
                     </xsl:for-each>
                     <xsl:apply-templates select="../Role"/>
                     <xsl:if test="(count(../../*/Contact) > 1) and (../@CorrespondingAffiliationID)">
-                        <xsl:text>&#160;(</xsl:text>
+                        <xsl:text>&nbsp;(</xsl:text>
                         <xsl:call-template name="printText">
                             <xsl:with-param name="text" select="'CorrespondingAuthor'"/>
                         </xsl:call-template>
@@ -854,7 +859,7 @@
                                     <xsl:text>, </xsl:text>
                                 </xsl:when>
                                 <xsl:when test="name() = 'Postcode' and following-sibling::City[position()=1]/text()">
-                                    <xsl:text>&#160;</xsl:text>
+                                    <xsl:text>&nbsp;</xsl:text>
                                 </xsl:when>
                             </xsl:choose>
                         </xsl:for-each>
@@ -969,7 +974,7 @@
 
     <xsl:template match="Term">
         <dt class="Term">
-            <dfn><xsl:apply-templates/>:&#160;
+            <dfn><xsl:apply-templates/>:&nbsp;
             </dfn>
         </dt>
     </xsl:template>
@@ -1105,10 +1110,10 @@
                     <xsl:value-of select="ArticleDOI"/>
                 </p>
                 <p class="Copyright">
-                    <xsl:text>&#160; &#160;</xsl:text>
+                    <xsl:text>&copy; &nbsp;</xsl:text>
                     <xsl:apply-templates
                             select="//ArticleCopyright/CopyrightHolderName | //ChapterCopyright/CopyrightHolderName"/>
-                    <xsl:text>&#160;</xsl:text>
+                    <xsl:text>&nbsp;</xsl:text>
                     <xsl:apply-templates select="//ArticleCopyright/CopyrightYear | //ChapterCopyright/CopyrightYear"/>
                 </p>
             </div>

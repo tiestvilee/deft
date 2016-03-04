@@ -2,6 +2,7 @@ package org.tiestvilee.deft;
 
 import com.googlecode.totallylazy.Predicates;
 import com.googlecode.totallylazy.Sequence;
+import com.googlecode.totallylazy.Xml;
 import org.tiestvilee.deft.grammar.Attribute;
 import org.tiestvilee.deft.grammar.Node;
 import org.tiestvilee.deft.grammar.Tag;
@@ -30,16 +31,16 @@ public class DeftXsltSerialiser {
         Sequence<Node> sequence = sequence(tag.children);
         return format("<%s%s>%s</%s>",
             tag.tagName,
-            sequence.filter(instanceOf(Attribute.class)).map(DeftXsltSerialiser::deftToXslt),
-            sequence.filter(not(instanceOf(Attribute.class))).map(DeftXsltSerialiser::deftToXslt),
+            sequence.filter(instanceOf(Attribute.class)).map(DeftXsltSerialiser::deftToXslt).toString(""),
+            sequence.filter(not(instanceOf(Attribute.class))).map(DeftXsltSerialiser::deftToXslt).toString(""),
             tag.tagName);
     }
 
     public static String deftToXslt(Attribute attr) {
-        return format(" %s='%s'", attr.tagName, deftToXslt(attr.value));
+        return format(" %s=\"%s\"", attr.tagName, deftToXslt(attr.value));
     }
 
     public static String deftToXslt(Text text) {
-        return text.string;
+        return Xml.escape(text.string);
     }
 }
