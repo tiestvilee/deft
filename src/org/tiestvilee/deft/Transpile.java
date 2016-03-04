@@ -3,6 +3,7 @@ package org.tiestvilee.deft;
 import com.googlecode.totallylazy.Characters;
 import com.googlecode.totallylazy.parser.Parser;
 import com.googlecode.totallylazy.parser.Parsers;
+import com.googlecode.totallylazy.parser.ReferenceParser;
 import com.googlecode.totallylazy.parser.Result;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
@@ -13,10 +14,11 @@ import org.xml.sax.helpers.DefaultHandler;
 import javax.xml.parsers.SAXParserFactory;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.List;
 
 import static com.googlecode.totallylazy.parser.Parsers.isChar;
 import static com.googlecode.totallylazy.parser.Parsers.string;
-import static com.googlecode.totallylazy.predicates.EqualsPredicate.is;
+import static com.googlecode.totallylazy.parser.Parsers.ws;
 import static java.lang.String.format;
 
 public class Transpile {
@@ -95,8 +97,22 @@ public class Transpile {
         return result.toString();
     }
 
-    public static final Parser<String> tagName = string(Characters.notAmong("[]")).many().map(Parsers.toString);
-    public static final Parser<Tag> tag = tagName.between(isChar('['), isChar(']')).map(tagName -> new Tag(tagName));
+    private static final ReferenceParser<Tag> tagContents = Parsers.reference();
+
+    public static final Parser<String> tagName = string(Characters.notAmong("[] ")).many().map(Parsers.toString);
+
+    public static final Parser<Tag> tag = Parsers.between(
+        isChar('['),
+        Parsers.tuple(ws(tagName), tagContents.sepBy(isChar(Characters.whitespace).many())),
+        isChar(']'))
+        .map(tagName -> {
+            List<Tag> second = tagName.second();
+            return new Tag(tagName.first(), second.toArray(new Tag[second.size()]));
+        });
+
+    static {
+        tagContents.set(tag);
+    }
 
     public static String transpileToXslt(String deft) {
         Result<Tag> result = tag.parse(deft);
@@ -108,9 +124,11 @@ public class Transpile {
 
     public static class Tag extends WithReflectiveToStringEqualsAndHashCode {
         public final String tagName;
+        private final Tag[] children;
 
-        public Tag(String tagName) {
+        public Tag(String tagName, Tag... children) {
             this.tagName = tagName;
+            this.children = children;
         }
     }
 }

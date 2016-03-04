@@ -15,7 +15,14 @@ public class DeftGrammarTest {
     }
 
     @Test
-    public void can_parse_tag() throws Exception {
-        assertThat(tag.parse("[hello]").option().get(), is(new Tag("hello")));
+    public void can_parse_simple_tag() throws Exception {
+        assertThat(tag.parse("[xsl:hello]").option().get(), is(new Tag("xsl:hello")));
+    }
+
+    @Test
+    public void can_parse_nested_tag() throws Exception {
+        assertThat(
+            tag.parse("[xsl:hello [something]]").option().get(),
+            is(new Tag("xsl:hello", new Tag("something"))));
     }
 }
