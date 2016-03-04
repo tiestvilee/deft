@@ -18,12 +18,16 @@ import static java.lang.String.format;
 public class DeftGrammar {
     static final ReferenceParser<Node> tagContents = Parsers.reference();
 
-    private static Parse<String> escapedChar = isChar('\\').next(string(Characters.among("'\\"))); // .map(str -> str.substring(1));
+    private static Parse<String> escapedChar = isChar('\\').next(string(Characters.among("'\\")));
     public static final Parser<Text> textContents = string(Characters.notAmong("'\\")).or(escapedChar).many().map(text -> new Text(Parsers.toString.apply(text)));
-    public static final Parser<Text> text = Parsers.between(isChar('\''), textContents, isChar('\''));
+    public static final Parser<Text> text = between(isChar('\''), textContents, isChar('\''));
+
+    private static Parse<String> escapedCommentChar = isChar('\\').next(string(Characters.among("}\\")));
+    public static final Parser<Comment> commentContents = string(Characters.notAmong("}\\")).or(escapedCommentChar).many().map(text -> new Comment(Parsers.toString.apply(text)));
+    public static final Parser<Comment> comment = between(isChar('{'), commentContents, isChar('}'));
 
     public static final Parser<String> tagName = string(Characters.notAmong("[] ")).many().map(Parsers.toString);
-    public static final Parser<Node> tag = Parsers.between(
+    public static final Parser<Node> tag = between(
         isChar('['),
         tuple(ws(tagName), tagContents.sepBy(isChar(whitespace).many())),
         isChar(']'))
@@ -37,7 +41,7 @@ public class DeftGrammar {
     }
 
     static {
-        DeftGrammar.tagContents.set(Parsers.or(DeftGrammar.tag, DeftGrammar.text));
+        tagContents.set(Parsers.or(tag, text, comment));
     }
 
 }

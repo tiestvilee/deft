@@ -3,10 +3,7 @@ package org.tiestvilee.deft;
 import com.googlecode.totallylazy.Predicates;
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Xml;
-import org.tiestvilee.deft.grammar.Attribute;
-import org.tiestvilee.deft.grammar.Node;
-import org.tiestvilee.deft.grammar.Tag;
-import org.tiestvilee.deft.grammar.Text;
+import org.tiestvilee.deft.grammar.*;
 
 import static com.googlecode.totallylazy.Predicates.instanceOf;
 import static com.googlecode.totallylazy.Predicates.not;
@@ -23,6 +20,9 @@ public class DeftXsltSerialiser {
         }
         if (node instanceof Attribute) {
             return deftToXslt((Attribute) node);
+        }
+        if (node instanceof Comment) {
+            return deftToXslt((Comment) node);
         }
         throw new RuntimeException("unknown Node type: " + node.getClass().toString());
     }
@@ -42,5 +42,9 @@ public class DeftXsltSerialiser {
 
     public static String deftToXslt(Text text) {
         return Xml.escape(text.string);
+    }
+
+    public static String deftToXslt(Comment comment) {
+        return format("<!--%s-->", comment.string);
     }
 }

@@ -21,7 +21,6 @@ public class TranspileTest {
 
         String deft = Transpile.transpileToDeft(xsltViaDocument);
         String andBack = Transpile.transpileToXslt(deft);
-        System.out.println("andBack = " + andBack);
         String result = serialise(documentFrom(andBack));
 
         Assert.assertEquals(stripWhitespaceFrom(xsltViaDocument), stripWhitespaceFrom(result));
@@ -44,6 +43,12 @@ public class TranspileTest {
     public void deft_understands_attributes() throws Exception {
         assertThat(Transpile.transpileToDeft("<xslt:something attr='value'>hello</xslt:something>"), is("[xslt:something [@attr 'value'] 'hello']"));
         assertThat(Transpile.transpileToXslt("[xslt:something [@attr 'value'] 'hello']"), is("<xslt:something attr=\"value\">hello</xslt:something>"));
+    }
+
+    @Test
+    public void deft_understands_comments() throws Exception {
+        assertThat(Transpile.transpileToDeft("<xslt:something><!--a comment--></xslt:something>"), is("[xslt:something {a comment}]"));
+        assertThat(Transpile.transpileToXslt("[xslt:something {a comment}]"), is("<xslt:something><!--a comment--></xslt:something>"));
     }
 
     private String stripWhitespaceFrom(String originalXslt) {

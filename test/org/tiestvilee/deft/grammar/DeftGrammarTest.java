@@ -1,4 +1,4 @@
-package org.tiestvilee.deft;
+package org.tiestvilee.deft.grammar;
 
 import com.googlecode.totallylazy.parser.Result;
 import junit.framework.Assert;
@@ -33,6 +33,13 @@ public class DeftGrammarTest {
         assertDeft(
             "[xsl:hello 'an escaped \\' string']",
             new Tag("xsl:hello", new Text("an escaped ' string")));
+    }
+
+    @Test
+    public void can_parse_comment_in_tag() throws Exception {
+        assertDeft(
+            "[xsl:hello {a comment}]",
+            new Tag("xsl:hello", new Comment("a comment")));
     }
 
     @Test
