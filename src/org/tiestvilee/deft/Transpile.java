@@ -6,8 +6,6 @@ import org.tiestvilee.deft.grammar.Node;
 import org.tiestvilee.deft.grammar.Tag;
 import org.tiestvilee.deft.xslt.XsltDeftSerialiser;
 
-import static java.lang.String.format;
-
 public class Transpile {
     public static String transpileToDeft(String xslt) throws Exception {
         return XsltDeftSerialiser.transpileToDeft(xslt);
