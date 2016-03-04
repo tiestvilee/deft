@@ -1,0 +1,2 @@
+mvn://repo.bodar.com/com.googlecode.totallylazy:totallylazy:pack|sources:1.61
+mvn:commons-lang:commons-lang:jar|sources:2.6
