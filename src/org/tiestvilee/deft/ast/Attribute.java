@@ -1,8 +1,4 @@
-package org.tiestvilee.deft.grammar;
-
-import java.util.List;
-
-import static java.util.Arrays.asList;
+package org.tiestvilee.deft.ast;
 
 public class Attribute extends Node {
     public final String tagName;

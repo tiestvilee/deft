@@ -1,4 +1,4 @@
-package org.tiestvilee.deft.grammar;
+package org.tiestvilee.deft.ast;
 
 public interface NodeVisitor<T> {
     T visit(Tag tag);

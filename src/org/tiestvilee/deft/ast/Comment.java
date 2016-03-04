@@ -1,4 +1,4 @@
-package org.tiestvilee.deft.grammar;
+package org.tiestvilee.deft.ast;
 
 public class Comment extends Node {
     public final String string;

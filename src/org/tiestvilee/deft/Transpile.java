@@ -1,9 +1,9 @@
 package org.tiestvilee.deft;
 
 import com.googlecode.totallylazy.parser.Result;
+import org.tiestvilee.deft.ast.Node;
+import org.tiestvilee.deft.ast.Tag;
 import org.tiestvilee.deft.grammar.DeftGrammar;
-import org.tiestvilee.deft.grammar.Node;
-import org.tiestvilee.deft.grammar.Tag;
 import org.tiestvilee.deft.xslt.XsltDeftSerialiser;
 
 public class Transpile {

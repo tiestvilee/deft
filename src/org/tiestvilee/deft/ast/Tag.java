@@ -1,4 +1,4 @@
-package org.tiestvilee.deft.grammar;
+package org.tiestvilee.deft.ast;
 
 import java.util.List;
 

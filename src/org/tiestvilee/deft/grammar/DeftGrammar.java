@@ -6,14 +6,12 @@ import com.googlecode.totallylazy.parser.Parse;
 import com.googlecode.totallylazy.parser.Parser;
 import com.googlecode.totallylazy.parser.Parsers;
 import com.googlecode.totallylazy.parser.ReferenceParser;
+import org.tiestvilee.deft.ast.*;
 
 import java.util.List;
 
 import static com.googlecode.totallylazy.Characters.whitespace;
-import static com.googlecode.totallylazy.Sequences.sequence;
 import static com.googlecode.totallylazy.parser.Parsers.*;
-import static com.googlecode.totallylazy.parser.Parsers.isChar;
-import static java.lang.String.format;
 
 public class DeftGrammar {
     static final ReferenceParser<Node> tagContents = Parsers.reference();

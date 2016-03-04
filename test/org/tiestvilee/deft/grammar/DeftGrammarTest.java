@@ -3,7 +3,7 @@ package org.tiestvilee.deft.grammar;
 import com.googlecode.totallylazy.parser.Result;
 import junit.framework.Assert;
 import org.junit.Test;
-import org.tiestvilee.deft.grammar.*;
+import org.tiestvilee.deft.ast.*;
 
 import static com.googlecode.totallylazy.Option.some;
 import static org.hamcrest.CoreMatchers.is;

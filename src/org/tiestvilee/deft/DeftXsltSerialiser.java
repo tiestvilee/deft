@@ -2,7 +2,7 @@ package org.tiestvilee.deft;
 
 import com.googlecode.totallylazy.Sequence;
 import com.googlecode.totallylazy.Xml;
-import org.tiestvilee.deft.grammar.*;
+import org.tiestvilee.deft.ast.*;
 
 import static com.googlecode.totallylazy.Predicates.instanceOf;
 import static com.googlecode.totallylazy.Predicates.not;

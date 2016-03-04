@@ -8,8 +8,6 @@ import javax.xml.parsers.SAXParserFactory;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
-import static java.lang.String.format;
-
 public class XsltDeftSerialiser {
     public static String transpileToDeft(String xslt) throws ParserConfigurationException, SAXException, IOException {
         StringBuilder result = new StringBuilder();

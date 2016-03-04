@@ -1,7 +1,7 @@
 <xsl:stylesheet version="2.0"
                 xmlns:meta="http://www.springer.com/app/meta"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:xslt="http://www.w3.org/1999/XSL/Transform" xmlns:xst="http://www.w3.org/1999/XSL/Transform">
+>
     <xsl:import href="APlusPlus2HTML_Int_Core.xslt"/>
     <xsl:import href="APlusPlus2HTML_Int_Article.xslt"/>
     <xsl:import href="APlusPlus2HTML_Int_Chapter.xslt"/>
