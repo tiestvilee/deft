@@ -27,8 +27,14 @@ public class TranspileTest {
 
     @Test
     public void deft_replaces_angles_with_squares() throws Exception {
-        assertThat(Transpile.transpileToDeft("<xslt:something/>"), is("[xslt:something]"));
-        assertThat(Transpile.transpileToXslt("[xslt:something]"), is("<xslt:something/>"));
+        assertThat(Transpile.transpileToDeft("<xslt:something></xslt:something>"), is("[xslt:something]"));
+        assertThat(Transpile.transpileToXslt("[xslt:something]"), is("<xslt:something></xslt:something>"));
+    }
+
+    @Test
+    public void deft_respects_text() throws Exception {
+        assertThat(Transpile.transpileToDeft("<xslt:something>hello</xslt:something>"), is("[xslt:something 'hello']"));
+        assertThat(Transpile.transpileToXslt("[xslt:something 'hello']"), is("<xslt:something>hello</xslt:something>"));
     }
 
     private String stripWhitespaceFrom(String originalXslt) {
