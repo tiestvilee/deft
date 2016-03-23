@@ -11,9 +11,10 @@ import java.io.IOException;
 
 public class XsltToAst {
     public static Node transpileToDeftAst(String xslt) throws ParserConfigurationException, SAXException, IOException {
-        SAXParser saxParser = SAXParserFactory.newInstance().newSAXParser();
         DeftAstSaxHandler deftAstSaxHandler = new DeftAstSaxHandler();
-        saxParser.setProperty("http://xml.org/sax/properties/lexical-handler", deftAstSaxHandler);
+
+        SAXParser saxParser = SAXParserFactory.newInstance().newSAXParser();
+        saxParser.setProperty("http://xml.org/sax/properties/lexical-handler", deftAstSaxHandler.lexicalHandler);
         saxParser.parse(
             new ByteArrayInputStream(xslt.getBytes()),
             deftAstSaxHandler

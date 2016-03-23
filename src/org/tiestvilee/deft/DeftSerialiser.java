@@ -1,11 +1,8 @@
 package org.tiestvilee.deft;
 
 import com.googlecode.totallylazy.Sequence;
-import com.googlecode.totallylazy.Xml;
 import org.tiestvilee.deft.ast.*;
 
-import static com.googlecode.totallylazy.Predicates.instanceOf;
-import static com.googlecode.totallylazy.Predicates.not;
 import static com.googlecode.totallylazy.Sequences.sequence;
 import static java.lang.String.format;
 
@@ -13,7 +10,8 @@ public class DeftSerialiser implements NodeVisitor<String> {
 
     public String visit(Tag tag) {
         Sequence<Node> sequence = sequence(tag.children);
-        return format("[%s%s]",
+        return format("%s[%s%s]",
+            tag.tagName.equals("xsl:template") ? "\n" : "",
             tag.tagName,
             sequence.map(node -> " " + node.visit(this)).toString(""));
     }
@@ -23,7 +21,7 @@ public class DeftSerialiser implements NodeVisitor<String> {
     }
 
     public String visit(Text text) {
-        return "'" + Xml.escape(text.string) + "'";
+        return "'" + text.string + "'";
     }
 
     public String visit(Comment comment) {
