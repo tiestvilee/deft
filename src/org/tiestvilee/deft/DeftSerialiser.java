@@ -11,7 +11,7 @@ public class DeftSerialiser implements NodeVisitor<String> {
     public String visit(Tag tag) {
         Sequence<Node> sequence = sequence(tag.children);
         return format("%s[%s%s]",
-            tag.tagName.equals("xsl:template") ? "\n" : "",
+            tag.tagName.equals("deft") ? "\n" : "",
             tag.tagName,
             sequence.map(node -> " " + node.visit(this)).toString(""));
     }
