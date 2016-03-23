@@ -31,4 +31,9 @@ public class XsltSerialiser implements NodeVisitor<String> {
     public String visit(Comment comment) {
         return format("<!--%s-->", comment.string);
     }
+
+    @Override
+    public String visit(XPath xPath) {
+        throw new UnsupportedOperationException("xpath should have been refactored by now");
+    }
 }

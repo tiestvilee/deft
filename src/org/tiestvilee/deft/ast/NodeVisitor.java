@@ -8,4 +8,6 @@ public interface NodeVisitor<T> {
     T visit(Attribute attribute);
 
     T visit(Comment comment);
+
+    T visit(XPath xPath);
 }

@@ -27,4 +27,9 @@ public class DeftSerialiser implements NodeVisitor<String> {
     public String visit(Comment comment) {
         return format("{%s}", comment.string);
     }
+
+    @Override
+    public String visit(XPath xPath) {
+        return format("`%s`", xPath.xPath);
+    }
 }
