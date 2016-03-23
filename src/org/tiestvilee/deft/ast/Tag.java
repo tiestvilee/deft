@@ -9,9 +9,17 @@ public class Tag extends Node {
     public final String tagName;
     public final List<Node> children;
 
+    public static Tag tag(String tagName, Node... children) {
+        return new Tag(tagName, children);
+    }
+
     public Tag(String tagName, Node... children) {
         this.tagName = tagName;
         this.children = asList(children);
+    }
+
+    public static Tag tag(String tagName, List<Node> children) {
+        return new Tag(tagName, children);
     }
 
     public Tag(String tagName, List<Node> children) {

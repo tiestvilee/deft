@@ -52,6 +52,14 @@ public class TranspileTest {
         assertThat(Transpile.transpileToXslt("[xslt:something {a comment}]"), is("<xslt:something><!--a comment--></xslt:something>"));
     }
 
+//    @Test
+//    public void deft_renames_template_tags() throws Exception {
+//        assertThat(Transpile.transpileToDeft("<xsl:template name=\"mytemplate\">some text</xsl:template>"),
+//            is("[deft [@name 'mytemplate'] 'some text']"));
+//        assertThat(Transpile.transpileToXslt("[deft [@name 'mytemplate'] 'some text']"),
+//            is("<xsl:template name=\"mytemplate\">some text</xsl:template>"));
+//    }
+
     private String stripWhitespaceFrom(String originalXslt) {
         return originalXslt.replaceAll("\\s+", "").replaceAll("\\'", "\"");
     }
