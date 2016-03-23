@@ -24,6 +24,10 @@ public class DeftGrammar {
     public static final Parser<Comment> commentContents = string(Characters.notAmong("}\\")).or(escapedCommentChar).many().map(text -> new Comment(Parsers.toString.apply(text)));
     public static final Parser<Comment> comment = between(isChar('{'), commentContents, isChar('}'));
 
+    private static Parse<String> escapedXPathChar = isChar('\\').next(string(Characters.among("`\\")));
+    public static final Parser<XPath> xPathContents = string(Characters.notAmong("`\\")).or(escapedXPathChar).many().map(text -> new XPath(Parsers.toString.apply(text)));
+    public static final Parser<XPath> xPath = between(isChar('`'), xPathContents, isChar('`'));
+
     public static final Parser<String> tagName = string(Characters.notAmong("[] ")).many().map(Parsers.toString);
     public static final Parser<Node> tag = between(
         isChar('['),
@@ -39,7 +43,7 @@ public class DeftGrammar {
     }
 
     static {
-        tagContents.set(Parsers.or(tag, text, comment));
+        tagContents.set(Parsers.or(tag, text, comment, xPath));
     }
 
 }

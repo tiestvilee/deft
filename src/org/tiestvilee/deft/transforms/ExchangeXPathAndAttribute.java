@@ -29,7 +29,9 @@ public class ExchangeXPathAndAttribute {
         @Override
         public Node visit(Attribute attribute) {
             if (inMatchingTag && attribute.tagName.equals(attrName) && attribute.value instanceof Text) {
-                return xpath(((Text) attribute.value).string); // how to do this better?
+                // how to do this better?
+                // not happy about the casting/instance ofs or the escaping and unescaping of the quotes.
+                return xpath(((Text) attribute.value).string.replace("\\'", "'"));
             }
             return super.visit(attribute);
         }
@@ -40,7 +42,7 @@ public class ExchangeXPathAndAttribute {
 
         @Override
         public Node visit(XPath xpath) {
-            return inMatchingTag ? attr(attrName, text(xpath.xPath)) : xpath;
+            return inMatchingTag ? attr(attrName, text(xpath.xPath.replaceAll("'", "\\'"))) : xpath;
         }
     }
 }

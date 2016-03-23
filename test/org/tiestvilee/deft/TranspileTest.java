@@ -2,7 +2,6 @@ package org.tiestvilee.deft;
 
 import com.sun.org.apache.xml.internal.serialize.OutputFormat;
 import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
-import org.junit.Assert;
 import org.junit.Test;
 import org.w3c.dom.Document;
 
@@ -12,6 +11,7 @@ import java.util.stream.Collectors;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertEquals;
 
 public class TranspileTest {
 
@@ -20,11 +20,13 @@ public class TranspileTest {
         String xsltViaDocument = serialise(documentFrom(testFile()));
 
         String deft = Transpile.transpileToDeft(xsltViaDocument);
+//        String deftOld = Transpile.transpileToDeftOld(xsltViaDocument);
+//        assertEquals(deft, deftOld);
 //        System.out.println("deft = " + deft);
         String andBack = Transpile.transpileToXslt(deft);
         String result = serialise(documentFrom(andBack));
 
-        Assert.assertEquals(stripWhitespaceFrom(xsltViaDocument), stripWhitespaceFrom(result));
+        assertEquals(stripWhitespaceFrom(xsltViaDocument), stripWhitespaceFrom(result));
         assertThat(stripWhitespaceFrom(xsltViaDocument), is(stripWhitespaceFrom(result)));
     }
 

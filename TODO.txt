@@ -1,0 +1,2 @@
+store strings unescaped - only escape on serialising
+nicer structure to apply set of refactorings/tree-transforms forwards and backwards.

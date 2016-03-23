@@ -31,15 +31,22 @@ public class DeftGrammarTest {
             "[xsl:hello 'a string']",
             new Tag("xsl:hello", new Text("a string")));
         assertDeft(
-            "[xsl:hello 'an escaped \\' string']",
-            new Tag("xsl:hello", new Text("an escaped ' string")));
+            "[xsl:hello 'an escaped \\' string\\\\']",
+            new Tag("xsl:hello", new Text("an escaped ' string\\")));
     }
 
     @Test
     public void can_parse_comment_in_tag() throws Exception {
         assertDeft(
-            "[xsl:hello {a comment}]",
-            new Tag("xsl:hello", new Comment("a comment")));
+            "[xsl:hello {\\\\a comment\\}}]",
+            new Tag("xsl:hello", new Comment("\\a comment}")));
+    }
+
+    @Test
+    public void can_parse_xpath_in_tag() throws Exception {
+        assertDeft(
+            "[xsl:hello `\\\\a path\\``]",
+            new Tag("xsl:hello", new XPath("\\a path`")));
     }
 
     @Test
