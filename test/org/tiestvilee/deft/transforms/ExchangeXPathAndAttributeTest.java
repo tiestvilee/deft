@@ -12,7 +12,7 @@ import static org.tiestvilee.deft.ast.Text.text;
 import static org.tiestvilee.deft.ast.XPath.xpath;
 
 public class ExchangeXPathAndAttributeTest {
-    ExchangeXPathAndAttribute exchangeXPathAndAttribute = new ExchangeXPathAndAttribute("select");
+    ExchangeXPathAndAttribute exchangeXPathAndAttribute = new ExchangeXPathAndAttribute("matchTag", "select");
 
     @Test
     public void does_nothing_when_nothing_to_do() throws Exception {
@@ -24,20 +24,28 @@ public class ExchangeXPathAndAttributeTest {
 
     @Test
     public void transform_appropriate_attribute_into_xpath_and_back() throws Exception {
-        Tag originalAst = tag("aTag", attr("select", text("xpath string")), attr("anotherAttr", text("anotherValue")), tag("child"));
-        Tag updatedAst = tag("aTag", xpath("xpath string"), attr("anotherAttr", text("anotherValue")), tag("child"));
+        Tag originalAst = tag("matchTag", attr("select", text("xpath string")), attr("anotherAttr", text("anotherValue")), tag("child"));
+        Tag updatedAst = tag("matchTag", xpath("xpath string"), attr("anotherAttr", text("anotherValue")), tag("child"));
 
         assertThat(exchangeXPathAndAttribute.changeAttributeToXPath(originalAst), is((Node) updatedAst));
         assertThat(exchangeXPathAndAttribute.changeXPathToAttribute(updatedAst), is((Node) originalAst));
     }
-//
-//    @Test
-//    public void transform_tag_specific_attribute_into_xpath_and_back() throws Exception {
-//        Tag originalAst = tag("superTag", tag("match", attr("select", text("xpath string"))), tag("doNotMatch", attr("select", text("xpath string"))));
-//        Tag updatedAst = tag("superTag", tag("match", xpath("xpath string")), tag("doNotMatch", attr("select", text("xpath string"))));
-//
-//        assertThat(exchangeXPathAndAttribute.changeAttributeToXPath(originalAst), is((Node) updatedAst));
-//        assertThat(exchangeXPathAndAttribute.changeXPathToAttribute(updatedAst), is((Node) originalAst));
-//    }
+
+    @Test
+    public void transform_tag_specific_attribute_into_xpath_and_back() throws Exception {
+        Tag originalAst = tag("superTag",
+            tag("matchTag",
+                attr("select", text("xpath string")),
+                tag("child", attr("select", text("xpath string")))),
+            tag("doNotMatch", attr("select", text("xpath string"))));
+        Tag updatedAst = tag("superTag",
+            tag("matchTag",
+                xpath("xpath string"),
+                tag("child", attr("select", text("xpath string")))),
+            tag("doNotMatch", attr("select", text("xpath string"))));
+
+        assertThat(exchangeXPathAndAttribute.changeAttributeToXPath(originalAst), is((Node) updatedAst));
+        assertThat(exchangeXPathAndAttribute.changeXPathToAttribute(updatedAst), is((Node) originalAst));
+    }
 
 }
