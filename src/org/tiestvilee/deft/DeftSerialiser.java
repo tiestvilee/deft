@@ -21,15 +21,15 @@ public class DeftSerialiser implements NodeVisitor<String> {
     }
 
     public String visit(Text text) {
-        return "'" + text.string + "'";
+        return format("'%s'", text.string.replace("'", "\\'"));
     }
 
     public String visit(Comment comment) {
-        return format("{%s}", comment.string);
+        return format("{%s}", comment.string.replace("}", "\\}"));
     }
 
     @Override
     public String visit(XPath xPath) {
-        return format("`%s`", xPath.xPath);
+        return format("`%s`", xPath.xPath.replace("`", "\\`"));
     }
 }

@@ -23,7 +23,7 @@ class DeftAstSaxHandler extends DefaultHandler {
         @Override
         public void comment(char[] ch, int start, int length) throws SAXException {
             tags.addFirst(tags.removeFirst().append(new Comment(
-                new String(ch, start, length).replace("}", "\\}"))
+                new String(ch, start, length))
             ));
         }
     };
@@ -36,13 +36,9 @@ class DeftAstSaxHandler extends DefaultHandler {
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
         List<Node> attributeList = new ArrayList<>();
         for (int i = 0; i < attributes.getLength(); i++) {
-            attributeList.add(new Attribute(attributes.getQName(i), new Text(stupidEscape(attributes.getValue(i)))));
+            attributeList.add(new Attribute(attributes.getQName(i), new Text(attributes.getValue(i))));
         }
         tags.addFirst(new Tag(qName, attributeList));
-    }
-
-    private String stupidEscape(String value) {
-        return value.replace("'", "\\'");
     }
 
     @Override
@@ -56,12 +52,12 @@ class DeftAstSaxHandler extends DefaultHandler {
     public void characters(char[] ch, int start, int length) throws SAXException {
         String string = new String(ch, start, length);
         if (tags.peek().tagName.equals("xsl:text")) {
-            tags.addFirst(tags.removeFirst().append(new Text(stupidEscape(string))));
+            tags.addFirst(tags.removeFirst().append(new Text(string)));
             return;
         }
         string = string.trim();
         if (string.length() > 0) {
-            tags.addFirst(tags.removeFirst().append(new Text(stupidEscape(string))));
+            tags.addFirst(tags.removeFirst().append(new Text(string)));
         }
     }
 
