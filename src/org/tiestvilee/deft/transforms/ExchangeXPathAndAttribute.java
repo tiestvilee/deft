@@ -6,7 +6,7 @@ import static org.tiestvilee.deft.ast.Attribute.attr;
 import static org.tiestvilee.deft.ast.Text.text;
 import static org.tiestvilee.deft.ast.XPath.xpath;
 
-public class ExchangeXPathAndAttribute {
+public class ExchangeXPathAndAttribute implements Production {
     private final String tagName;
     private final String attrName;
 
@@ -15,12 +15,12 @@ public class ExchangeXPathAndAttribute {
         this.attrName = attrName;
     }
 
-    public Node changeAttributeToXPath(Tag ast) {
-        return new ChangeAttributeToXPath().visit(ast);
+    public Tag towardsDeft(Tag ast) {
+        return (Tag) new ChangeAttributeToXPath().visit(ast);
     }
 
-    public Node changeXPathToAttribute(Tag ast) {
-        return new ChangeXPathToAttribute().visit(ast);
+    public Tag towardsXslt(Tag ast) {
+        return (Tag) new ChangeXPathToAttribute().visit(ast);
     }
 
     private class ChangeAttributeToXPath extends TagMatchingNodeVisitor {

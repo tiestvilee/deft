@@ -18,8 +18,8 @@ public class ExchangeXPathAndAttributeTest {
     public void does_nothing_when_nothing_to_do() throws Exception {
         Tag ast = tag("aTag", attr("anAttr", text("aValue")), attr("anotherAttr", text("anotherValue")), tag("child"));
 
-        assertThat(exchangeXPathAndAttribute.changeAttributeToXPath(ast), is((Node) ast));
-        assertThat(exchangeXPathAndAttribute.changeXPathToAttribute(ast), is((Node) ast));
+        assertThat(exchangeXPathAndAttribute.towardsDeft(ast), is((Node) ast));
+        assertThat(exchangeXPathAndAttribute.towardsXslt(ast), is((Node) ast));
     }
 
     @Test
@@ -27,8 +27,8 @@ public class ExchangeXPathAndAttributeTest {
         Tag originalAst = tag("matchTag", attr("select", text("xpath string")), attr("anotherAttr", text("anotherValue")), tag("child"));
         Tag updatedAst = tag("matchTag", xpath("xpath string"), attr("anotherAttr", text("anotherValue")), tag("child"));
 
-        assertThat(exchangeXPathAndAttribute.changeAttributeToXPath(originalAst), is((Node) updatedAst));
-        assertThat(exchangeXPathAndAttribute.changeXPathToAttribute(updatedAst), is((Node) originalAst));
+        assertThat(exchangeXPathAndAttribute.towardsDeft(originalAst), is((Node) updatedAst));
+        assertThat(exchangeXPathAndAttribute.towardsXslt(updatedAst), is((Node) originalAst));
     }
 
     @Test
@@ -44,8 +44,8 @@ public class ExchangeXPathAndAttributeTest {
                 tag("child", attr("select", text("xpath string")))),
             tag("doNotMatch", attr("select", text("xpath string"))));
 
-        assertThat(exchangeXPathAndAttribute.changeAttributeToXPath(originalAst), is((Node) updatedAst));
-        assertThat(exchangeXPathAndAttribute.changeXPathToAttribute(updatedAst), is((Node) originalAst));
+        assertThat(exchangeXPathAndAttribute.towardsDeft(originalAst), is((Node) updatedAst));
+        assertThat(exchangeXPathAndAttribute.towardsXslt(updatedAst), is((Node) originalAst));
     }
 
 }
