@@ -22,8 +22,8 @@ public class TranspileTest {
         String deft = Transpile.transpileToDeft(xsltViaDocument);
 //        String deftOld = Transpile.transpileToDeftOld(xsltViaDocument);
 //        assertEquals(deft, deftOld);
-//        System.out.println("deft = " + deft);
-        String andBack = Transpile.transpileToXslt(deft);
+        System.out.println("deft = " + deft);
+        String andBack = Transpile.transpileToXslt(deft.trim());
         String result = serialise(documentFrom(andBack));
 
         assertEquals(stripWhitespaceFrom(xsltViaDocument), stripWhitespaceFrom(result));

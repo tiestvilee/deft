@@ -23,7 +23,9 @@ public class Transpile {
         new ExchangeTagNames("xsl:value-of", "value-of"),
         new ExchangeXPathAndAttribute("value-of", "select"),
         new ExchangeXPathAndAttribute("xsl:if", "test"),
-        new ExchangeXPathAndAttribute("xsl:when", "test"),
+        new ExchangeTagNames("xsl:otherwise", "otherwise"),
+        new ExchangeTagNames("xsl:when", "when"),
+        new ExchangeXPathAndAttribute("when", "test"),
         new ExchangeXPathAndAttribute("xsl:for-each", "select")
     );
     private static final Sequence<Production> productionsTowardsDeft = sequence(productions);
