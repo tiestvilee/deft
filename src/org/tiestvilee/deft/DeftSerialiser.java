@@ -6,54 +6,91 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.List;
 
-import static com.googlecode.totallylazy.Sequences.sequence;
 import static java.lang.String.format;
 import static java.util.Arrays.asList;
 
 public class DeftSerialiser implements NodeVisitor<String> {
 
-    private List<String> tagsThatIndent = asList("when", "otherwise");
-    private Deque<String> indent = new ArrayDeque<>();
+    private List<String> tagsThatGoOnANewline = asList("choose", "when", "otherwise");
+    private Deque<String> currentIndent = new ArrayDeque<>();
+    private boolean lastWasNewline = false;
+
+    public DeftSerialiser() {
+        currentIndent.push("");
+    }
 
     public String visit(Tag tag) {
-        String serialised = format("%s[%s%s]",
-            preceedingWhitespace(tag),
-            tag.tagName,
-            sequence(tag.children).map(node -> " " + node.visit(this)).toString(""));
-        if (tagsThatIndent.contains(tag.tagName)) {
-            indent.pop();
+        String preceedingWhitespace = "";
+        String followingWhitespace = "";
+
+        if (tag.tagName.equals("deft")) {
+            preceedingWhitespace = newline();
+            currentIndent.clear();
+            currentIndent.push("    ");
+        } else if (tagsThatGoOnANewline.contains(tag.tagName)) {
+            preceedingWhitespace = newline() + currentIndent.peek();
+            currentIndent.push(currentIndent.peek() + "    ");
+        } else {
+            if (lastWasNewline) {
+                preceedingWhitespace = currentIndent.peek();
+                currentIndent.push(currentIndent.peek() + "    ");
+            } else {
+                preceedingWhitespace = " ";
+            }
         }
-        return serialised;
+
+        StringBuilder builder = new StringBuilder();
+
+        lastWasNewline = false;
+        for (Node child : tag.children) {
+            builder.append(child.visit(this));
+        }
+
+        if (tagsThatGoOnANewline.contains(tag.tagName)) {
+            currentIndent.pop();
+        }
+
+        lastWasNewline = false;
+        if (tag.tagName.equals("deft")) {
+            currentIndent.clear();
+            currentIndent.push("");
+        }
+
+        return format("%s[%s%s]%s",
+            preceedingWhitespace,
+            tag.tagName,
+            builder.toString(),
+            followingWhitespace);
     }
 
-    private String preceedingWhitespace(Tag tag) {
-        if (tag.tagName.equals("deft")) {
-            indent.clear();
-            indent.push("    ");
-            return "\n";
-        }
-        if (tagsThatIndent.contains(tag.tagName)) {
-            String whitespace = "\n" + indent.peek();
-            indent.push(indent.peek() + "    ");
-            return whitespace;
-        }
-        return "";
-    }
+    private String newline() {return lastWasNewline ? "" : "\n";}
 
     public String visit(Attribute attr) {
-        return format("[@%s %s]", attr.tagName, attr.value.visit(this));
+        String preceedingWhitespace = lastWasNewline ? currentIndent.peek() : " ";
+        lastWasNewline = false;
+        return format("%s[@%s%s]", preceedingWhitespace, attr.tagName, attr.value.visit(this));
     }
 
     public String visit(Text text) {
-        return format("'%s'", text.string.replace("'", "\\'"));
+        String preceedingWhitespace = lastWasNewline ? currentIndent.peek() : " ";
+        lastWasNewline = false;
+        return format("%s'%s'", preceedingWhitespace, text.string.replace("'", "\\'"));
     }
 
     public String visit(Comment comment) {
-        return format("{%s}", comment.string.replace("}", "\\}"));
+        String serialised = format("%s%s{%s}\n", newline(), currentIndent.peek(), comment.string.replace("}", "\\}"));
+        lastWasNewline = true;
+        return serialised;
     }
 
     @Override
     public String visit(XPath xPath) {
-        return format("`%s`", xPath.xPath.replace("`", "\\`"));
+        String preceedingWhitespace = lastWasNewline ? currentIndent.peek() : " ";
+        lastWasNewline = false;
+        return format("%s`%s`", preceedingWhitespace, xPath.xPath.replace("`", "\\`"));
+    }
+
+    public static String serialise(Tag tag) {
+        return new DeftSerialiser().visit(tag).trim();
     }
 }

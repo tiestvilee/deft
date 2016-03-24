@@ -23,9 +23,10 @@ public class Transpile {
         new ExchangeTagNames("xsl:value-of", "value-of"),
         new ExchangeXPathAndAttribute("value-of", "select"),
         new ExchangeXPathAndAttribute("xsl:if", "test"),
-        new ExchangeTagNames("xsl:otherwise", "otherwise"),
+        new ExchangeTagNames("xsl:choose", "choose"),
         new ExchangeTagNames("xsl:when", "when"),
         new ExchangeXPathAndAttribute("when", "test"),
+        new ExchangeTagNames("xsl:otherwise", "otherwise"),
         new ExchangeXPathAndAttribute("xsl:for-each", "select")
     );
     private static final Sequence<Production> productionsTowardsDeft = sequence(productions);
@@ -35,7 +36,7 @@ public class Transpile {
         Tag deft = productionsTowardsDeft.foldLeft(
             (Tag) XsltToAst.transpileToDeftAst(xslt),
             (t, production) -> production.towardsDeft(t));
-        return new DeftSerialiser().visit(deft);
+        return DeftSerialiser.serialise(deft);
     }
 
     public static String transpileToXslt(String deft) {

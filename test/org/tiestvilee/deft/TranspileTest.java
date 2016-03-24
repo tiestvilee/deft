@@ -50,8 +50,8 @@ public class TranspileTest {
 
     @Test
     public void deft_understands_comments() throws Exception {
-        assertThat(Transpile.transpileToDeft("<xslt:something><!--a comment--></xslt:something>"), is("[xslt:something {a comment}]"));
-        assertThat(Transpile.transpileToXslt("[xslt:something {a comment}]"), is("<xslt:something><!--a comment--></xslt:something>"));
+        assertThat(Transpile.transpileToDeft("<xslt:something><!--a comment--></xslt:something>"), is("[xslt:something\n{a comment}\n]"));
+        assertThat(Transpile.transpileToXslt("[xslt:something\n {a comment}\n]"), is("<xslt:something><!--a comment--></xslt:something>"));
     }
 
     @Test
